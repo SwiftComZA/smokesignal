@@ -2,7 +2,7 @@ require("./index.css");
 const metamask = require("./metamask.js");
 const chains = require("../config.json");
 
-// const WalletConnect = require("@walletconnect/client").default;
+const WalletConnect = require("@walletconnect/client").default;
 const QRCodeModal = require("@walletconnect/qrcode-modal");
 
 window.localStorage.removeItem("walletconnect");
