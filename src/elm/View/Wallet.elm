@@ -56,7 +56,7 @@ viewWalletConnectButton =
         , Background.color Theme.white
         , hover
         ]
-        { onPress = Just Types.WalletConnectStart
+        { onPress = Just Types.NoOp
         , label =
             [ View.Img.walletConnect 20
             , text "WalletConnect"

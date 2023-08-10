@@ -133,6 +133,7 @@ type Msg
     | BalanceResponse (Result Http.Error TokenValue)
     | CloseComposeError
     | SharePost Core
+    | NoOp
     | WalletConnectStart
 
 

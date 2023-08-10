@@ -1513,6 +1513,9 @@ update msg model =
         ScrollResponse _ ->
             ( model, Cmd.none )
 
+        NoOp ->
+            ( model, Cmd.none )
+
 
 handleRoute : Model -> Route -> ( Model, Cmd Msg )
 handleRoute model route =
