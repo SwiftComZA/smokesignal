@@ -2,7 +2,7 @@ require("./index.css");
 const metamask = require("./metamask.js");
 const chains = require("../config.json");
 
-const WalletConnect = require("@walletconnect/client").default;
+// const WalletConnect = require("@walletconnect/client").default;
 const QRCodeModal = require("@walletconnect/qrcode-modal");
 
 window.localStorage.removeItem("walletconnect");
@@ -11,14 +11,14 @@ window.localStorage.removeItem("walletconnect");
  * refusing to re-open if the user closed it.
  * Revisit after WalletConnect 2.0 release.
  */
-const newConnector = () =>
-  new WalletConnect({
-    bridge: "https://bridge.walletconnect.org",
-    qrcodeModal: QRCodeModal,
-  });
+// const newConnector = () =>
+//   new WalletConnect({
+//     bridge: "https://bridge.walletconnect.org",
+//     qrcodeModal: QRCodeModal,
+//   });
 
 // eslint-disable-next-line fp/no-let
-let connector = newConnector();
+// let connector = newConnector();
 
 if (window.navigator.serviceWorker) {
   window.navigator.serviceWorker.register("./sw.js");
@@ -55,14 +55,14 @@ window.addEventListener("load", () => {
       .catch(app.ports.chainSwitchResponse.send)
   );
 
-  app.ports.connectToWalletConnect.subscribe(() => {
-    if (!connector.connected) {
-      // eslint-disable-next-line fp/no-mutation
-      connector = newConnector();
-      attachConnectorEvents(app);
-      connector.createSession();
-    }
-  });
+  // app.ports.connectToWalletConnect.subscribe(() => {
+  //   if (!connector.connected) {
+  //     // eslint-disable-next-line fp/no-mutation
+  //     connector = newConnector();
+  //     attachConnectorEvents(app);
+  //     connector.createSession();
+  //   }
+  // });
 
   app.ports.connectToWeb3.subscribe(() =>
     (async () => {

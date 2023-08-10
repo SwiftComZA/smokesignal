@@ -539,9 +539,8 @@ update msg model =
                         |> Cmd.batch
                     )
 
-        WalletConnectStart ->
-            ( model, Ports.connectToWalletConnect () )
-
+        -- WalletConnectStart ->
+        --     ( model, Ports.connectToWalletConnect () )
         HandleAccountingQueues time ->
             let
                 twoSecondsSinceUpdate updatedAt =
@@ -1505,6 +1504,9 @@ update msg model =
             )
 
         ScrollResponse _ ->
+            ( model, Cmd.none )
+
+        NoOp ->
             ( model, Cmd.none )
 
 

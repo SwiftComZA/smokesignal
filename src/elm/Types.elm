@@ -131,7 +131,11 @@ type Msg
     | BalanceResponse (Result Http.Error TokenValue)
     | CloseComposeError
     | SharePost Core
-    | WalletConnectStart
+    | NoOp
+
+
+
+--| WalletConnectStart
 
 
 type RequestOutcome
