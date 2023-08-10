@@ -1,5 +1,6 @@
 module View.Wallet exposing (view, viewMobileWalletSuggestion)
 
+import Browser exposing (element)
 import Element exposing (Element, column, el, fill, padding, paragraph, row, spacing, text, width)
 import Element.Background as Background
 import Element.Font as Font
@@ -17,7 +18,12 @@ view : Model -> Element Msg
 view model =
     if model.wallet == Types.NoneDetected then
         [ viewMobileWalletSuggestion
-        , viewWalletConnectButton
+        , if model.disableWalletConnect == False then
+            viewWalletConnectButton
+
+          else
+            [ text "WalletConnect not currently supported" ]
+                |> paragraph [ Font.center, Font.size 22, Font.color white ]
         ]
             |> column [ width fill, spacing 20 ]
 
@@ -30,8 +36,13 @@ view model =
                     model.chainSwitchInProgress
                     model.dProfile
                 )
-        , viewWalletConnectButton
-            |> View.Common.when (not <| Wallet.isActive model.wallet)
+        , if model.disableWalletConnect == False then
+            viewWalletConnectButton
+                |> View.Common.when (not <| Wallet.isActive model.wallet)
+
+          else
+            [ text "WalletConnect not currently supported" ]
+                |> paragraph [ Font.center, Font.size 22, Font.color white ]
         ]
             |> column [ width fill, spacing 20 ]
 

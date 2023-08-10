@@ -186,6 +186,7 @@ startApp flags model =
         , alphaUrl = alphaUrl
         , faucetToken = flags.faucetToken
         , shareEnabled = flags.shareEnabled
+        , disableWalletConnect = flags.disableWalletConnect
       }
     , Cmd.batch
         [ ethCmd

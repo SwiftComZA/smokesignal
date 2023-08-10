@@ -540,7 +540,13 @@ update msg model =
                     )
 
         WalletConnectStart ->
-            ( model, Ports.connectToWalletConnect () )
+            ( model
+            , if model.disableWalletConnect == True then
+                Ports.connectToWalletConnect ()
+
+              else
+                Cmd.none
+            )
 
         HandleAccountingQueues time ->
             let

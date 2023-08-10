@@ -3,12 +3,12 @@
   "name": "SmokeSignal",
   "icons": [
     {
-      "src": "/img/192.png",
+      "src": "/img/logo_192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/img/512.png",
+      "src": "/img/logo_512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
