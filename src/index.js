@@ -2,27 +2,10 @@ require("./index.css");
 const metamask = require("./metamask.js");
 const chains = require("../config.json");
 
-// const WalletConnect = require("@walletconnect/client").default;
+const WalletConnect = require("@walletconnect/client").default;
 const QRCodeModal = require("@walletconnect/qrcode-modal");
 
 window.localStorage.removeItem("walletconnect");
-
-/* Needs to be able to be re-initiated because QRCodeModal was
- * refusing to re-open if the user closed it.
- * Revisit after WalletConnect 2.0 release.
- */
-// const newConnector = () =>
-//   new WalletConnect({
-//     bridge: "https://bridge.walletconnect.org",
-//     qrcodeModal: QRCodeModal,
-//   });
-
-// eslint-disable-next-line fp/no-let
-// let connector = newConnector();
-
-if (window.navigator.serviceWorker) {
-  window.navigator.serviceWorker.register("./sw.js");
-}
 
 const { Elm } = require("./elm/App.elm");
 
@@ -31,6 +14,34 @@ const xDaiProviderUrl = XDAI_PROVIDER_URL;
 const ethProviderUrl = ETH_PROVIDER_URL;
 const faucetToken = FAUCET_TOKEN;
 const gaTrackingId = GA_TRACKING_ID;
+const disableWalletConnect = true
+
+/* Needs to be able to be re-initiated because QRCodeModal was
+ * refusing to re-open if the user closed it.
+ * Revisit after WalletConnect 2.0 release.
+ */
+const newConnector = () => {
+  if(!disableWalletConnect) {  
+    new WalletConnect({
+      bridge: "https://bridge.walletconnect.org",
+      qrcodeModal: QRCodeModal,
+    });
+  } else {
+    null
+  }
+}
+
+// eslint-disable-next-line fp/no-let
+let connector = null;
+if(newConnector) {
+  connector = newConnector();
+}
+
+  
+
+if (window.navigator.serviceWorker) {
+  window.navigator.serviceWorker.register("./sw.js");
+}
 /* eslint-enable no-undef */
 
 // Local storage keys
@@ -55,14 +66,14 @@ window.addEventListener("load", () => {
       .catch(app.ports.chainSwitchResponse.send)
   );
 
-  // app.ports.connectToWalletConnect.subscribe(() => {
-  //   if (!connector.connected) {
-  //     // eslint-disable-next-line fp/no-mutation
-  //     connector = newConnector();
-  //     attachConnectorEvents(app);
-  //     connector.createSession();
-  //   }
-  // });
+  app.ports.connectToWalletConnect.subscribe(() => {
+    if (newConnector && !connector.connected) {
+      // eslint-disable-next-line fp/no-mutation
+      connector = newConnector();
+      attachConnectorEvents(app);
+      connector.createSession();
+    }
+  });
 
   app.ports.connectToWeb3.subscribe(() =>
     (async () => {
@@ -148,6 +159,7 @@ function startDapp() {
       faucetToken,
       shareEnabled: typeof window.navigator.share === "function",
       href: window.location.href,
+      disableWalletConnect: disableWalletConnect, 
     },
   });
 

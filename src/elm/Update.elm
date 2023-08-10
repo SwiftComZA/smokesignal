@@ -539,8 +539,15 @@ update msg model =
                         |> Cmd.batch
                     )
 
-        -- WalletConnectStart ->
-        --     ( model, Ports.connectToWalletConnect () )
+        WalletConnectStart ->
+            ( model
+            , if model.disableWalletConnect == True then
+                Ports.connectToWalletConnect ()
+
+              else
+                Cmd.none
+            )
+
         HandleAccountingQueues time ->
             let
                 twoSecondsSinceUpdate updatedAt =

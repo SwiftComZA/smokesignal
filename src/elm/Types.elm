@@ -27,6 +27,7 @@ type alias Flags =
     , faucetToken : String
     , shareEnabled : Bool
     , href : String
+    , disableWalletConnect : Bool
     }
 
 
@@ -76,6 +77,7 @@ type alias Model =
             { updatedAt : Posix
             , postIds : List PostId
             }
+    , disableWalletConnect : Bool
     }
 
 
@@ -132,10 +134,7 @@ type Msg
     | CloseComposeError
     | SharePost Core
     | NoOp
-
-
-
---| WalletConnectStart
+    | WalletConnectStart
 
 
 type RequestOutcome
