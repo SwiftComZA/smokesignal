@@ -14,12 +14,21 @@ const zkSyncTestnet =
         zksync: true,
       }
     : {
-        url: "https://zksync2-testnet.zksync.dev",
-        ethNetwork: "goerli",
+        url: "https://zksync2-testnet.zksync.dev", 
+        ethNetwork: "goerli",                      
         zksync: true,
         // contract verification endpoint
         verifyURL:
           "https://zksync2-testnet-explorer.zksync.dev/contract_verification",
+      };
+
+const zkSyncMainnet = {
+        url: "https://zksync-era.blockpi.network/v1/rpc/public", 
+        ethNetwork: "mainnet",                      
+        zksync: true,
+        // contract verification endpoint
+        verifyURL:
+          "https://zksync2-mainnet-explorer.zksync.io/contract_verification",
       };
 
 const config: HardhatUserConfig = {
