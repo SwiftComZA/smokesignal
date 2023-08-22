@@ -21,6 +21,9 @@ getProviderUrl chain =
         XDai ->
             .xDai >> .providerUrl
 
+        ZkSync ->
+            .zKSync >> .providerUrl
+
 
 getConfig : Chain -> Config -> ChainConfig
 getConfig chain =
@@ -30,6 +33,9 @@ getConfig chain =
 
         XDai ->
             .xDai
+
+        ZkSync ->
+            .zKSync
 
 
 txUrl : Chain -> TxHash -> String
@@ -42,6 +48,10 @@ txUrl chain hash =
             "https://blockscout.com/poa/xdai/tx/"
                 ++ Eth.Utils.txHashToString hash
 
+        ZkSync ->
+            "https://goerli.explorer.zksync.io/"
+                ++ Eth.Utils.txHashToString hash
+
 
 getColor : Chain -> Color
 getColor chain =
@@ -50,6 +60,9 @@ getColor chain =
             Theme.xDai
 
         Eth ->
+            Theme.ethereum
+
+        ZkSync ->
             Theme.ethereum
 
 
@@ -61,6 +74,9 @@ getName chain =
 
         XDai ->
             "xDai"
+
+        ZkSync ->
+            "ZKSync era Testnet"
 
 
 chainDecoder : Flags -> Decoder (List Types.ChainConfig)
@@ -78,6 +94,9 @@ chainDecoder flags =
 
                     Types.XDai ->
                         flags.xDaiProviderUrl
+
+                    Types.ZkSync ->
+                        flags.zkTestProviderUrl
             }
         )
         (Decode.field "network" decodeChain
@@ -110,6 +129,10 @@ decodeChain =
                     -- Hardhat server
                     Eth.Net.Private 31337 ->
                         Types.Eth
+                            |> Ok
+
+                    Eth.Net.Private 280 ->
+                        Types.ZkSync
                             |> Ok
 
                     _ ->

@@ -42,12 +42,18 @@ chain c =
                 Types.Eth ->
                     "Ethereum"
 
+                Types.ZkSync ->
+                    "ZKSync era Testnet"
+
         img =
             case c of
                 Types.XDai ->
                     View.Img.xDai 20
 
                 Types.Eth ->
+                    View.Img.eth 20 <| Element.rgb 0.5 0.5 1
+
+                Types.ZkSync ->
                     View.Img.eth 20 <| Element.rgb 0.5 0.5 1
     in
     [ img, text txt ]
@@ -292,6 +298,42 @@ viewInstructions chainSwitchInProgress dProfile userInfo =
 
             else
                 Nothing
+
+        ZkSync ->
+            [ [ el [ Font.bold ] (text "Note:")
+              , text " Posting on SmokeSignal using Ethereum can result in very high gas fees. Using xDai is a cheaper alternative."
+              ]
+                |> paragraph [ Font.color black ]
+            , Input.button
+                [ Background.color Theme.green
+                , padding 10
+                , View.Attrs.roundBorder
+                , hover
+                , width <| px 180
+                , Element.alignRight
+                ]
+                { onPress = Just XDaiImport
+                , label =
+                    if chainSwitchInProgress then
+                        spinner 20 black
+                            |> el [ centerX ]
+
+                    else
+                        text "Switch to xDai"
+                            |> el [ centerX ]
+                }
+                |> when (userInfo.provider == Types.MetaMask)
+            ]
+                |> (if dProfile == Mobile then
+                        column
+
+                    else
+                        row
+                   )
+                    [ width fill
+                    , spacing 10
+                    ]
+                |> Just
     )
         |> whenJust
             (el
@@ -393,4 +435,9 @@ permapostUrl chain_ hash =
         XDai ->
             permaposturl
                 ++ "xdai&tx="
+                ++ Eth.Utils.txHashToString hash
+
+        ZkSync ->
+            permaposturl
+                ++ "zksync&tx="
                 ++ Eth.Utils.txHashToString hash

@@ -12,6 +12,7 @@ const { Elm } = require("./elm/App.elm");
 /* eslint-disable no-undef */
 const xDaiProviderUrl = XDAI_PROVIDER_URL;
 const ethProviderUrl = ETH_PROVIDER_URL;
+const zkTestProviderUrl = ZKTEST_PROVIDER_URL;
 const faucetToken = FAUCET_TOKEN;
 const gaTrackingId = GA_TRACKING_ID;
 const disableWalletConnect = true
@@ -88,8 +89,10 @@ window.addEventListener("load", () => {
   );
 
   app.ports.submitPost.subscribe(({ provider, params }) => {
+    console.log("SubmitPost");
     switch (provider) {
       case "METAMASK": {
+        console.log("SubmitPost");
         metamask
           .sendTransaction(params)
           .then(app.ports.postResponse.send)
@@ -110,8 +113,10 @@ window.addEventListener("load", () => {
   });
 
   app.ports.submitBurnOrTip.subscribe(({ provider, params }) => {
+    console.log("SubmitBurnOrTip");
     switch (provider) {
       case "METAMASK": {
+        console.log("SubmitBurnOrTip");
         metamask
           .sendTransaction(params)
           .then(app.ports.postResponse.send)
@@ -154,6 +159,7 @@ function startDapp() {
       newUser: !window.localStorage.getItem(HAS_VISITED),
       ethProviderUrl,
       xDaiProviderUrl,
+      zkTestProviderUrl,
       hasWallet,
       chains,
       faucetToken,

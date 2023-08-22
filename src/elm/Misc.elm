@@ -98,6 +98,13 @@ emptyConfig =
         , startScanBlock = 0
         , providerUrl = ""
         }
+    , zKSync =
+        { chain = Types.Eth
+        , ssContract = emptyAddress
+        , ssScriptsContract = emptyAddress
+        , startScanBlock = 0
+        , providerUrl = ""
+        }
     }
 
 

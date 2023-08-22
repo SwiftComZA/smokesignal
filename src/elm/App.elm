@@ -64,6 +64,12 @@ init flags =
                                                 { config_
                                                     | ethereum = data
                                                 }
+
+                                        Types.ZkSync ->
+                                            \config_ ->
+                                                { config_
+                                                    | zKSync = data
+                                                }
                                 )
                                 emptyModel.config
 

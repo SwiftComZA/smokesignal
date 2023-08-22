@@ -118,6 +118,10 @@ update msg model =
                                                             { r
                                                                 | inProgress = False
                                                                 , error =
+                                                                    let
+                                                                        log =
+                                                                            Debug.log "I AM HERE" " 3"
+                                                                    in
                                                                     Just "There has been a problem."
                                                             }
                                                        )
@@ -253,6 +257,10 @@ update msg model =
                                                             { r
                                                                 | inProgress = False
                                                                 , error =
+                                                                    let
+                                                                        log =
+                                                                            Debug.log "I AM HERE" " 4"
+                                                                    in
                                                                     Just "There has been a problem."
                                                             }
                                                         )
@@ -503,6 +511,28 @@ update msg model =
                     , cmd
                     )
 
+                ZkSync ->
+                    let
+                        ( newEventSentry, cmd ) =
+                            model.sentries.ethereum
+                                |> unwrap ( Nothing, Cmd.none )
+                                    (Sentry.update
+                                        eventMsg
+                                    )
+                    in
+                    ( { model
+                        | sentries =
+                            model.sentries
+                                |> (\ss ->
+                                        { ss
+                                            | ethereum =
+                                                newEventSentry
+                                        }
+                                   )
+                      }
+                    , cmd
+                    )
+
         PostLogReceived res ->
             case res.returnData of
                 Err err ->
@@ -619,6 +649,18 @@ update msg model =
                             { updatedAt = time
                             , postIds =
                                 model.xDaiAccountingQueue
+                                    |> unwrap [] .postIds
+                                    |> (::) core.id
+                            }
+                                |> Just
+                    }
+
+                ZkSync ->
+                    { model
+                        | ethAccountingQueue =
+                            { updatedAt = time
+                            , postIds =
+                                model.ethAccountingQueue
                                     |> unwrap [] .postIds
                                     |> (::) core.id
                             }
@@ -790,7 +832,12 @@ update msg model =
                                             |> (\r ->
                                                     { r
                                                         | inProgress = False
-                                                        , error = Just "There has been a problem."
+                                                        , error =
+                                                            let
+                                                                log =
+                                                                    Debug.log "I AM HERE" " 5"
+                                                            in
+                                                            Just "There has been a problem."
                                                     }
                                                )
                                 in
@@ -941,7 +988,11 @@ update msg model =
                     ( { model
                         | compose = compose
                       }
-                    , SSContract.getEthPriceCmd
+                    , let
+                        log =
+                            Debug.log "Chain Config: " (Chain.getConfig userInfo.chain model.config)
+                      in
+                      SSContract.getEthPriceCmd
                         (Chain.getConfig userInfo.chain model.config)
                         |> Task.attempt PriceResponse
                     )
@@ -1235,12 +1286,20 @@ update msg model =
                                     | compose =
                                         model.compose
                                             |> (\r ->
+                                                    let
+                                                        log =
+                                                            Debug.log "I AM HERE" " 1"
+                                                    in
                                                     { r
                                                         | message =
                                                             Just "There has been a problem."
                                                     }
                                                )
                                     , wallet =
+                                        let
+                                            log =
+                                                Debug.log "I AM HERE" " 2"
+                                        in
                                         Active
                                             { userInfo
                                                 | faucetStatus =
