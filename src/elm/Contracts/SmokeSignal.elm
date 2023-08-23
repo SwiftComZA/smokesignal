@@ -62,6 +62,9 @@ burnEncodedPost wallet smokeSignalContractAddress draft =
 
                             XDai ->
                                 Just bigIntOne
+
+                            ZkSync ->
+                                Nothing
                 }
            )
 
@@ -138,6 +141,9 @@ tipForPost wallet smokeSignalContractAddress messageHash amount donation =
 
                             XDai ->
                                 Just bigIntOne
+
+                            ZkSync ->
+                                Nothing
                 }
            )
 
@@ -164,6 +170,9 @@ burnForPost wallet smokeSignalContractAddress messageHash amount donation =
 
                             XDai ->
                                 Just bigIntOne
+
+                            ZkSync ->
+                                Nothing
                 }
            )
 

@@ -22,6 +22,7 @@ type alias Flags =
     , newUser : Bool
     , ethProviderUrl : String
     , xDaiProviderUrl : String
+    , zkTestProviderUrl : String
     , hasWallet : Bool
     , chains : Value
     , faucetToken : String
@@ -38,6 +39,7 @@ type alias Model =
     , sentries :
         { xDai : Maybe (EventSentry Msg)
         , ethereum : Maybe (EventSentry Msg)
+        , zKSync : Maybe (EventSentry Msg)
         }
     , view : View
     , sortType : SortType
@@ -73,6 +75,11 @@ type alias Model =
             , postIds : List PostId
             }
     , xDaiAccountingQueue :
+        Maybe
+            { updatedAt : Posix
+            , postIds : List PostId
+            }
+    , zKSyncAccountingQueue :
         Maybe
             { updatedAt : Posix
             , postIds : List PostId
@@ -224,6 +231,7 @@ type alias ComposeModel =
 type alias Config =
     { xDai : ChainConfig
     , ethereum : ChainConfig
+    , zKSync : ChainConfig
     }
 
 
@@ -389,6 +397,7 @@ type Route
 type Chain
     = XDai
     | Eth
+    | ZkSync
 
 
 type SortType

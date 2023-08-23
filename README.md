@@ -18,6 +18,7 @@ In Linux, these can be quickly set via i.e. `export ENV=development`. Alternativ
 | `ENV` | Set to `production` or `development`. |
 | `ETH_PROVIDER_URL` | The provider URL for querying the Ethereum network. |
 | `XDAI_PROVIDER_URL` | The provider URL for querying the xDai network. |
+| `ZKTEST_PROVIDER_URL` | The provider URL for querying the zkSync testnet network. |
 | `FAUCET_TOKEN` | The secret used to authenticate xDai faucet requests. |
 | `GA_TRACKING_ID` | The Google Analytics tracking ID. |
 | `FB_TRACKING_ID` | The Facebook Analytics tracking ID. |
