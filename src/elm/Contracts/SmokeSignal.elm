@@ -65,6 +65,9 @@ burnEncodedPost wallet smokeSignalContractAddress draft =
 
                             ZkSync ->
                                 Nothing
+
+                            ScrollTestnet ->
+                                Nothing
                 }
            )
 
@@ -144,6 +147,9 @@ tipForPost wallet smokeSignalContractAddress messageHash amount donation =
 
                             ZkSync ->
                                 Nothing
+
+                            ScrollTestnet ->
+                                Nothing
                 }
            )
 
@@ -172,6 +178,9 @@ burnForPost wallet smokeSignalContractAddress messageHash amount donation =
                                 Just bigIntOne
 
                             ZkSync ->
+                                Nothing
+
+                            ScrollTestnet ->
                                 Nothing
                 }
            )

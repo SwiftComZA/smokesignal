@@ -24,6 +24,9 @@ getProviderUrl chain =
         ZkSync ->
             .zKSync >> .providerUrl
 
+        ScrollTestnet ->
+            .scrollTestnet >> .providerUrl
+
 
 getConfig : Chain -> Config -> ChainConfig
 getConfig chain =
@@ -36,6 +39,9 @@ getConfig chain =
 
         ZkSync ->
             .zKSync
+
+        ScrollTestnet ->
+            .scrollTestnet
 
 
 txUrl : Chain -> TxHash -> String
@@ -52,6 +58,10 @@ txUrl chain hash =
             "https://goerli.explorer.zksync.io/"
                 ++ Eth.Utils.txHashToString hash
 
+        ScrollTestnet ->
+            "https://sepolia-blockscout.scroll.io/tx/"
+                ++ Eth.Utils.txHashToString hash
+
 
 getColor : Chain -> Color
 getColor chain =
@@ -63,6 +73,9 @@ getColor chain =
             Theme.ethereum
 
         ZkSync ->
+            Theme.ethereum
+
+        ScrollTestnet ->
             Theme.ethereum
 
 
@@ -77,6 +90,9 @@ getName chain =
 
         ZkSync ->
             "ZKSync era Testnet"
+
+        ScrollTestnet ->
+            "Scroll Testnet"
 
 
 chainDecoder : Flags -> Decoder (List Types.ChainConfig)
@@ -97,6 +113,9 @@ chainDecoder flags =
 
                     Types.ZkSync ->
                         flags.zkTestProviderUrl
+
+                    Types.ScrollTestnet ->
+                        flags.scrollTestnetProviderUrl
             }
         )
         (Decode.field "network" decodeChain
@@ -133,6 +152,10 @@ decodeChain =
 
                     Eth.Net.Private 280 ->
                         Types.ZkSync
+                            |> Ok
+
+                    Eth.Net.Private 534351 ->
+                        Types.ScrollTestnet
                             |> Ok
 
                     _ ->

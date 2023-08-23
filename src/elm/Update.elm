@@ -517,7 +517,29 @@ update msg model =
                             model.sentries
                                 |> (\ss ->
                                         { ss
-                                            | ethereum =
+                                            | zKSync =
+                                                newEventSentry
+                                        }
+                                   )
+                      }
+                    , cmd
+                    )
+
+                ScrollTestnet ->
+                    let
+                        ( newEventSentry, cmd ) =
+                            model.sentries.scrollTestnet
+                                |> unwrap ( Nothing, Cmd.none )
+                                    (Sentry.update
+                                        eventMsg
+                                    )
+                    in
+                    ( { model
+                        | sentries =
+                            model.sentries
+                                |> (\ss ->
+                                        { ss
+                                            | scrollTestnet =
                                                 newEventSentry
                                         }
                                    )
@@ -649,10 +671,22 @@ update msg model =
 
                 ZkSync ->
                     { model
-                        | ethAccountingQueue =
+                        | zKSyncAccountingQueue =
                             { updatedAt = time
                             , postIds =
-                                model.ethAccountingQueue
+                                model.zKSyncAccountingQueue
+                                    |> unwrap [] .postIds
+                                    |> (::) core.id
+                            }
+                                |> Just
+                    }
+
+                ScrollTestnet ->
+                    { model
+                        | scrollTestnetAccountingQueue =
+                            { updatedAt = time
+                            , postIds =
+                                model.scrollTestnetAccountingQueue
                                     |> unwrap [] .postIds
                                     |> (::) core.id
                             }
