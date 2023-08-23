@@ -517,7 +517,7 @@ update msg model =
                             model.sentries
                                 |> (\ss ->
                                         { ss
-                                            | ethereum =
+                                            | zKSync =
                                                 newEventSentry
                                         }
                                    )
@@ -620,6 +620,30 @@ update msg model =
                                 else
                                     Nothing
                             )
+
+                zKSyncCmd =
+                    model.zKSyncAccountingQueue
+                        |> Maybe.andThen
+                            (\data ->
+                                if twoSecondsSinceUpdate data.updatedAt then
+                                    fetchBulk model.config ZkSync data.postIds
+                                        |> Just
+
+                                else
+                                    Nothing
+                            )
+
+                scrollTestnetCmd =
+                    model.zKSyncAccountingQueue
+                        |> Maybe.andThen
+                            (\data ->
+                                if twoSecondsSinceUpdate data.updatedAt then
+                                    fetchBulk model.config ScrollTestnet data.postIds
+                                        |> Just
+
+                                else
+                                    Nothing
+                            )
             in
             ( { model
                 | ethAccountingQueue =
@@ -634,10 +658,26 @@ update msg model =
 
                     else
                         Nothing
+                , zKSyncAccountingQueue =
+                    if zKSyncCmd == Nothing then
+                        model.zKSyncAccountingQueue
+
+                    else
+                        Nothing
+                , scrollTestnetAccountingQueue =
+                    if scrollTestnetCmd == Nothing then
+                        model.scrollTestnetAccountingQueue
+
+                    else
+                        Nothing
               }
             , [ ethCmd
                     |> Maybe.withDefault Cmd.none
               , xDaiCmd
+                    |> Maybe.withDefault Cmd.none
+              , zKSyncCmd
+                    |> Maybe.withDefault Cmd.none
+              , scrollTestnetCmd
                     |> Maybe.withDefault Cmd.none
               ]
                 |> Cmd.batch
