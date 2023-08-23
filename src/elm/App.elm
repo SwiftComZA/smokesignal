@@ -170,6 +170,9 @@ startApp flags model =
         ( xDaiSentry, xDaiCmd ) =
             startSentry model.config.xDai
 
+        ( zKSyncSentry, zKSyncCmd ) =
+            startSentry model.config.zKSync
+
         now =
             Time.millisToPosix flags.nowInMillis
     in
@@ -184,6 +187,7 @@ startApp flags model =
                         { cs
                             | xDai = Just xDaiSentry
                             , ethereum = Just ethSentry
+                            , zKSync = Just zKSyncSentry
                         }
                    )
         , userNotices = routingUserNotices
@@ -197,6 +201,7 @@ startApp flags model =
     , Cmd.batch
         [ ethCmd
         , xDaiCmd
+        , zKSyncCmd
         , Random.generate Types.NewDemoSrc DemoPhaceSrcMutator.addressSrcGenerator
         , Ports.setDescription Misc.defaultSeoDescription
         ]

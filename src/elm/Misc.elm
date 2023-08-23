@@ -34,6 +34,7 @@ emptyModel =
     , sentries =
         { xDai = Nothing
         , ethereum = Nothing
+        , zKSync = Nothing
         }
     , blockTimes = Dict.empty
     , showAddressId = Nothing
@@ -63,6 +64,7 @@ emptyModel =
     , shareEnabled = False
     , ethAccountingQueue = Nothing
     , xDaiAccountingQueue = Nothing
+    , zKSyncAccountingQueue = Nothing
     , disableWalletConnect = True
     }
 

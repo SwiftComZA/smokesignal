@@ -39,6 +39,7 @@ type alias Model =
     , sentries :
         { xDai : Maybe (EventSentry Msg)
         , ethereum : Maybe (EventSentry Msg)
+        , zKSync : Maybe (EventSentry Msg)
         }
     , view : View
     , sortType : SortType
@@ -74,6 +75,11 @@ type alias Model =
             , postIds : List PostId
             }
     , xDaiAccountingQueue :
+        Maybe
+            { updatedAt : Posix
+            , postIds : List PostId
+            }
+    , zKSyncAccountingQueue :
         Maybe
             { updatedAt : Posix
             , postIds : List PostId

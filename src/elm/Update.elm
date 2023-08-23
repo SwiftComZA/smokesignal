@@ -514,7 +514,7 @@ update msg model =
                 ZkSync ->
                     let
                         ( newEventSentry, cmd ) =
-                            model.sentries.ethereum
+                            model.sentries.zKSync
                                 |> unwrap ( Nothing, Cmd.none )
                                     (Sentry.update
                                         eventMsg
