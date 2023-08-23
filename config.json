@@ -19,5 +19,12 @@
     "ssContract": "0x22da8FAe02B25877417322817a53Fbb3a43d6BC8",
     "ssScriptsContract": "0xfD12d100F40532cE2dB8401222321b24c6bC8Cc3",
     "scan": 10758837
+  },
+  {
+    "name": "scrollTestnet",
+    "network": 534351,
+    "ssContract": "0x49Ee7742058df635400DEe4e80Bada6Fe371d81F",
+    "ssScriptsContract": "0x0000000000000000000000000000000000000000",
+    "scan": 150233
   }
 ]

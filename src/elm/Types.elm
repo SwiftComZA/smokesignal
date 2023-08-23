@@ -23,6 +23,7 @@ type alias Flags =
     , ethProviderUrl : String
     , xDaiProviderUrl : String
     , zkTestProviderUrl : String
+    , scrollTestnetProviderUrl : String
     , hasWallet : Bool
     , chains : Value
     , faucetToken : String
@@ -40,6 +41,7 @@ type alias Model =
         { xDai : Maybe (EventSentry Msg)
         , ethereum : Maybe (EventSentry Msg)
         , zKSync : Maybe (EventSentry Msg)
+        , scrollTestnet : Maybe (EventSentry Msg)
         }
     , view : View
     , sortType : SortType
@@ -80,6 +82,11 @@ type alias Model =
             , postIds : List PostId
             }
     , zKSyncAccountingQueue :
+        Maybe
+            { updatedAt : Posix
+            , postIds : List PostId
+            }
+    , scrollTestnetAccountingQueue :
         Maybe
             { updatedAt : Posix
             , postIds : List PostId
@@ -232,6 +239,7 @@ type alias Config =
     { xDai : ChainConfig
     , ethereum : ChainConfig
     , zKSync : ChainConfig
+    , scrollTestnet : ChainConfig
     }
 
 
@@ -398,6 +406,7 @@ type Chain
     = XDai
     | Eth
     | ZkSync
+    | ScrollTestnet
 
 
 type SortType

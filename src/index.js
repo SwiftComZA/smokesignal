@@ -13,6 +13,7 @@ const { Elm } = require("./elm/App.elm");
 const xDaiProviderUrl = XDAI_PROVIDER_URL;
 const ethProviderUrl = ETH_PROVIDER_URL;
 const zkTestProviderUrl = ZKTEST_PROVIDER_URL;
+const scrollTestnetProviderUrl = SCROLLTESTNET_PROVIDER_URL;
 const faucetToken = FAUCET_TOKEN;
 const gaTrackingId = GA_TRACKING_ID;
 const disableWalletConnect = true
@@ -160,6 +161,7 @@ function startDapp() {
       ethProviderUrl,
       xDaiProviderUrl,
       zkTestProviderUrl,
+      scrollTestnetProviderUrl,
       hasWallet,
       chains,
       faucetToken,
