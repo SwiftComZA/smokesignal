@@ -517,7 +517,7 @@ update msg model =
                             model.sentries
                                 |> (\ss ->
                                         { ss
-                                            | zKSync =
+                                            | ethereum =
                                                 newEventSentry
                                         }
                                    )

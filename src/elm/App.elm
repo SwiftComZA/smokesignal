@@ -211,6 +211,7 @@ startApp flags model =
     , Cmd.batch
         [ ethCmd
         , xDaiCmd
+        , zKSyncCmd
         , scrollTestnetCmd
         , Random.generate Types.NewDemoSrc DemoPhaceSrcMutator.addressSrcGenerator
         , Ports.setDescription Misc.defaultSeoDescription
