@@ -118,10 +118,6 @@ update msg model =
                                                             { r
                                                                 | inProgress = False
                                                                 , error =
-                                                                    let
-                                                                        log =
-                                                                            Debug.log "I AM HERE" " 3"
-                                                                    in
                                                                     Just "There has been a problem."
                                                             }
                                                        )
@@ -257,10 +253,6 @@ update msg model =
                                                             { r
                                                                 | inProgress = False
                                                                 , error =
-                                                                    let
-                                                                        log =
-                                                                            Debug.log "I AM HERE" " 4"
-                                                                    in
                                                                     Just "There has been a problem."
                                                             }
                                                         )
@@ -833,10 +825,6 @@ update msg model =
                                                     { r
                                                         | inProgress = False
                                                         , error =
-                                                            let
-                                                                log =
-                                                                    Debug.log "I AM HERE" " 5"
-                                                            in
                                                             Just "There has been a problem."
                                                     }
                                                )
@@ -988,11 +976,7 @@ update msg model =
                     ( { model
                         | compose = compose
                       }
-                    , let
-                        log =
-                            Debug.log "Chain Config: " (Chain.getConfig userInfo.chain model.config)
-                      in
-                      SSContract.getEthPriceCmd
+                    , SSContract.getEthPriceCmd
                         (Chain.getConfig userInfo.chain model.config)
                         |> Task.attempt PriceResponse
                     )
@@ -1286,20 +1270,12 @@ update msg model =
                                     | compose =
                                         model.compose
                                             |> (\r ->
-                                                    let
-                                                        log =
-                                                            Debug.log "I AM HERE" " 1"
-                                                    in
                                                     { r
                                                         | message =
                                                             Just "There has been a problem."
                                                     }
                                                )
                                     , wallet =
-                                        let
-                                            log =
-                                                Debug.log "I AM HERE" " 2"
-                                        in
                                         Active
                                             { userInfo
                                                 | faucetStatus =

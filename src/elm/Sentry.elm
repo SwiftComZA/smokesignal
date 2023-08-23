@@ -124,10 +124,6 @@ watch_ onlyOnce onReceive (EventSentry sentry) logFilter =
 
         Nothing ->
             -- If sentry is still waiting for blocknumber, mark request as pending.
-            let
-                log =
-                    Debug.log "Still waiting for blocknumber: " sentry
-            in
             ( EventSentry { newSentry | pending = Set.insert sentry.ref newSentry.pending }
             , Cmd.none
             , sentry.ref
