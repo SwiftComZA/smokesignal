@@ -37,12 +37,14 @@ type alias Model =
     { wallet : Wallet
     , now : Posix
     , dProfile : DisplayProfile
-    , sentries :
-        { xDai : Maybe (EventSentry Msg)
-        , ethereum : Maybe (EventSentry Msg)
-        , zKSync : Maybe (EventSentry Msg)
-        , scrollTestnet : Maybe (EventSentry Msg)
-        }
+
+    -- , sentries :
+    --     { xDai : Maybe (EventSentry Msg)
+    --     , ethereum : Maybe (EventSentry Msg)
+    --     , zKSync : Maybe (EventSentry Msg)
+    --     , scrollTestnet : Maybe (EventSentry Msg)
+    --     }
+    , sentries : Dict String (Maybe (EventSentry Msg))
     , view : View
     , sortType : SortType
     , blockTimes : Dict BlockTimeKey Posix
@@ -57,7 +59,7 @@ type alias Model =
     , newUserModal : Bool
     , maybeBurnOrTipUX : Maybe BurnOrTipUX
     , maybeActiveTooltip : Maybe TooltipId
-    , config : Config
+    , config : Dict String ChainConfig
     , compose : ComposeModel
     , rootPosts : Dict PostKey RootPost
     , replyPosts : Dict PostKey ReplyPost
@@ -71,26 +73,35 @@ type alias Model =
     , faucetToken : String
     , gtagHistory : GTag.GTagHistory
     , shareEnabled : Bool
-    , ethAccountingQueue :
-        Maybe
-            { updatedAt : Posix
-            , postIds : List PostId
-            }
-    , xDaiAccountingQueue :
-        Maybe
-            { updatedAt : Posix
-            , postIds : List PostId
-            }
-    , zKSyncAccountingQueue :
-        Maybe
-            { updatedAt : Posix
-            , postIds : List PostId
-            }
-    , scrollTestnetAccountingQueue :
-        Maybe
-            { updatedAt : Posix
-            , postIds : List PostId
-            }
+
+    -- , ethAccountingQueue :
+    --     Maybe
+    --         { updatedAt : Posix
+    --         , postIds : List PostId
+    --         }
+    -- , xDaiAccountingQueue :
+    --     Maybe
+    --         { updatedAt : Posix
+    --         , postIds : List PostId
+    --         }
+    -- , zKSyncAccountingQueue :
+    --     Maybe
+    --         { updatedAt : Posix
+    --         , postIds : List PostId
+    --         }
+    -- , scrollTestnetAccountingQueue :
+    --     Maybe
+    --         { updatedAt : Posix
+    --         , postIds : List PostId
+    --         }
+    , accountingQueues :
+        Dict
+            String
+            (Maybe
+                { updatedAt : Posix
+                , postIds : List PostId
+                }
+            )
     , disableWalletConnect : Bool
     }
 
@@ -189,7 +200,7 @@ type alias RootPost =
 
 
 type alias ChainConfig =
-    { chain : Chain
+    { chain : String
     , ssContract : Address
     , ssScriptsContract : Address
     , startScanBlock : Int
@@ -235,12 +246,15 @@ type alias ComposeModel =
     }
 
 
-type alias Config =
-    { xDai : ChainConfig
-    , ethereum : ChainConfig
-    , zKSync : ChainConfig
-    , scrollTestnet : ChainConfig
-    }
+
+-- type alias Config =
+--     Dict ChainName ChainConfig
+-- {
+--     xDai : ChainConfig
+-- , ethereum : ChainConfig
+-- , zKSync : ChainConfig
+-- , scrollTestnet : ChainConfig
+-- }
 
 
 type alias BurnOrTipUX =
@@ -400,6 +414,10 @@ type Route
     | RouteAbout
     | RouteCompose
     | RouteUser Address
+
+
+
+-- TODO: Figure out how this affects everything given introduction of ChainName
 
 
 type Chain

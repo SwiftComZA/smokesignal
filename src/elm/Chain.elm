@@ -1,5 +1,6 @@
 module Chain exposing (chainDecoder, decodeChain, getColor, getConfig, getName, getProviderUrl, txUrl)
 
+import Dict exposing (Dict)
 import Element exposing (Color)
 import Eth.Decode
 import Eth.Net
@@ -9,39 +10,34 @@ import Helpers.Eth
 import Json.Decode as Decode exposing (Decoder)
 import Result.Extra
 import Theme
-import Types exposing (Chain(..), ChainConfig, Config, Flags)
+import Types exposing (Chain(..), ChainConfig, Flags)
 
 
-getProviderUrl : Chain -> Config -> String
-getProviderUrl chain =
-    case chain of
-        Eth ->
-            .ethereum >> .providerUrl
 
-        XDai ->
-            .xDai >> .providerUrl
-
-        ZkSync ->
-            .zKSync >> .providerUrl
-
-        ScrollTestnet ->
-            .scrollTestnet >> .providerUrl
+-- getProviderUrl : Chain -> Config -> String
+-- getProviderUrl chain =
+--     case chain of
+--         Eth ->
+--             .ethereum >> .providerUrl
+--         XDai ->
+--             .xDai >> .providerUrl
+--         ZkSync ->
+--             .zKSync >> .providerUrl
+--         ScrollTestnet ->
+--             .scrollTestnet >> .providerUrl
 
 
-getConfig : Chain -> Config -> ChainConfig
-getConfig chain =
-    case chain of
-        Eth ->
-            .ethereum
+getProviderUrl : String -> Dict String ChainConfig -> Maybe String
+getProviderUrl chainName config =
+    config
+        |> Dict.get chainName
+        |> Maybe.map .providerUrl
 
-        XDai ->
-            .xDai
 
-        ZkSync ->
-            .zKSync
-
-        ScrollTestnet ->
-            .scrollTestnet
+getConfig : String -> Dict String ChainConfig -> Maybe ChainConfig
+getConfig chainName config =
+    config
+        |> Dict.get chainName
 
 
 txUrl : Chain -> TxHash -> String
@@ -105,25 +101,28 @@ chainDecoder flags =
             , startScanBlock = scan
             , providerUrl =
                 case chain of
-                    Types.Eth ->
+                    "Ethereum" ->
                         flags.ethProviderUrl
 
-                    Types.XDai ->
+                    "xDai" ->
                         flags.xDaiProviderUrl
 
-                    Types.ZkSync ->
+                    "ZkSyncTestnet" ->
                         flags.zkTestProviderUrl
 
-                    Types.ScrollTestnet ->
+                    "scrollTestnet" ->
                         flags.scrollTestnetProviderUrl
+
+                    _ ->
+                        "No Provider"
             }
         )
-        (Decode.field "network" decodeChain
-            |> Decode.andThen
-                (Result.Extra.unpack
-                    (always (Decode.fail "bad network"))
-                    Decode.succeed
-                )
+        (Decode.field "network" Decode.string
+         -- |> Decode.andThen
+         --     (Result.Extra.unpack
+         --         (always (Decode.fail "bad network"))
+         --         Decode.succeed
+         --     )
         )
         (Decode.field "ssContract" Eth.Decode.address)
         (Decode.field "ssScriptsContract" Eth.Decode.address)

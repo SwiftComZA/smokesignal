@@ -1,4 +1,4 @@
-module Misc exposing (decodeFaucetResponse, defaultSeoDescription, defaultTopic, dollarStringToToken, emptyAddress, emptyComposeModel, emptyModel, encodeShare, formatDollar, formatFloat, formatPosix, formatReplies, getCore, getPostOrReply, getTxReceipt, initDemoPhaceSrc, obscureAddress, parseHttpError, postIdToKey, providerToString, responsiveVal, screenWidthToDisplayProfile, scrollId, sortPostsFunc, sortTopics, sortTypeToString, tryRouteToView, validateTopic)
+module Misc exposing (chainToString, decodeFaucetResponse, defaultSeoDescription, defaultTopic, dollarStringToToken, emptyAddress, emptyComposeModel, emptyModel, encodeShare, formatDollar, formatFloat, formatPosix, formatReplies, getCore, getPostOrReply, getTxReceipt, initDemoPhaceSrc, obscureAddress, parseHttpError, postIdToKey, providerToString, responsiveVal, screenWidthToDisplayProfile, scrollId, sortPostsFunc, sortTopics, sortTypeToString, tryRouteToView, validateTopic)
 
 import Array
 import Chain
@@ -17,6 +17,7 @@ import Json.Decode as Decode exposing (Decoder, Value)
 import Json.Encode as Encode
 import Maybe.Extra exposing (unwrap)
 import Murmur3
+import Sentry exposing (EventSentry)
 import String.Extra
 import Task exposing (Task)
 import Time exposing (Posix)
@@ -31,12 +32,13 @@ emptyModel =
     , newUserModal = False
     , now = Time.millisToPosix 0
     , dProfile = Desktop
-    , sentries =
-        { xDai = Nothing
-        , ethereum = Nothing
-        , zKSync = Nothing
-        , scrollTestnet = Nothing
-        }
+    , sentries = Dict.empty
+
+    -- { xDai = Nothing
+    -- , ethereum = Nothing
+    -- , zKSync = Nothing
+    -- , scrollTestnet = Nothing
+    -- }
     , blockTimes = Dict.empty
     , showAddressId = Nothing
     , userNotices = []
@@ -63,10 +65,12 @@ emptyModel =
     , gtagHistory = GTag.emptyGtagHistory
     , sortType = HotSort
     , shareEnabled = False
-    , ethAccountingQueue = Nothing
-    , xDaiAccountingQueue = Nothing
-    , zKSyncAccountingQueue = Nothing
-    , scrollTestnetAccountingQueue = Nothing
+
+    -- , ethAccountingQueue = Nothing
+    -- , xDaiAccountingQueue = Nothing
+    -- , zKSyncAccountingQueue = Nothing
+    -- , scrollTestnetAccountingQueue = Nothing
+    , accountingQueues = Dict.empty
     , disableWalletConnect = True
     }
 
@@ -86,37 +90,57 @@ emptyComposeModel =
     }
 
 
-emptyConfig : Config
+emptyConfig : Dict String ChainConfig
 emptyConfig =
-    { xDai =
-        { chain = Types.Eth
-        , ssContract = emptyAddress
-        , ssScriptsContract = emptyAddress
-        , startScanBlock = 0
-        , providerUrl = ""
-        }
-    , ethereum =
-        { chain = Types.Eth
-        , ssContract = emptyAddress
-        , ssScriptsContract = emptyAddress
-        , startScanBlock = 0
-        , providerUrl = ""
-        }
-    , zKSync =
-        { chain = Types.Eth
-        , ssContract = emptyAddress
-        , ssScriptsContract = emptyAddress
-        , startScanBlock = 0
-        , providerUrl = ""
-        }
-    , scrollTestnet =
-        { chain = Types.Eth
-        , ssContract = emptyAddress
-        , ssScriptsContract = emptyAddress
-        , startScanBlock = 0
-        , providerUrl = ""
-        }
-    }
+    Dict.empty
+
+
+chainToString : Chain -> String
+chainToString chain =
+    case chain of
+        XDai ->
+            "xDai"
+
+        Eth ->
+            "ethereum"
+
+        ZkSync ->
+            "zkSync"
+
+        ScrollTestnet ->
+            "scroll"
+
+
+
+-- { xDai =
+--     { chain = Types.Eth
+--     , ssContract = emptyAddress
+--     , ssScriptsContract = emptyAddress
+--     , startScanBlock = 0
+--     , providerUrl = ""
+--     }
+-- , ethereum =
+--     { chain = Types.Eth
+--     , ssContract = emptyAddress
+--     , ssScriptsContract = emptyAddress
+--     , startScanBlock = 0
+--     , providerUrl = ""
+--     }
+-- , zKSync =
+--     { chain = Types.Eth
+--     , ssContract = emptyAddress
+--     , ssScriptsContract = emptyAddress
+--     , startScanBlock = 0
+--     , providerUrl = ""
+--     }
+-- , scrollTestnet =
+--     { chain = Types.Eth
+--     , ssContract = emptyAddress
+--     , ssScriptsContract = emptyAddress
+--     , startScanBlock = 0
+--     , providerUrl = ""
+--     }
+-- }
 
 
 emptyAddress : Address

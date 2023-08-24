@@ -14,7 +14,7 @@ import Http
 import Json.Decode
 import List.Extra
 import Maybe.Extra exposing (unwrap)
-import Misc exposing (emptyComposeModel, postIdToKey, sortTypeToString)
+import Misc exposing (chainToString, emptyComposeModel, postIdToKey, sortTypeToString)
 import Ports
 import Post
 import Random
@@ -323,7 +323,7 @@ update msg model =
                 |> List.map
                     (\tx ->
                         Misc.getTxReceipt
-                            (Chain.getProviderUrl tx.chain model.config)
+                            (Maybe.withDefault "none" (Chain.getProviderUrl (chainToString tx.chain) model.config))
                             tx.txHash
                             |> Task.attempt TrackedTxStatusResult
                     )
@@ -457,96 +457,96 @@ update msg model =
                             )
                     )
 
+        -- TODO
         EventSentryMsg chain eventMsg ->
-            case chain of
-                Eth ->
-                    let
-                        ( newEventSentry, cmd ) =
-                            model.sentries.ethereum
-                                |> unwrap ( Nothing, Cmd.none )
-                                    (Sentry.update
-                                        eventMsg
-                                    )
-                    in
-                    ( { model
-                        | sentries =
-                            model.sentries
-                                |> (\ss ->
-                                        { ss
-                                            | ethereum =
-                                                newEventSentry
-                                        }
-                                   )
-                      }
-                    , cmd
-                    )
+            ( model, Cmd.none )
 
-                XDai ->
-                    let
-                        ( newEventSentry, cmd ) =
-                            model.sentries.xDai
-                                |> unwrap ( Nothing, Cmd.none )
-                                    (Sentry.update
-                                        eventMsg
-                                    )
-                    in
-                    ( { model
-                        | sentries =
-                            model.sentries
-                                |> (\ss ->
-                                        { ss
-                                            | xDai =
-                                                newEventSentry
-                                        }
-                                   )
-                      }
-                    , cmd
-                    )
-
-                ZkSync ->
-                    let
-                        ( newEventSentry, cmd ) =
-                            model.sentries.zKSync
-                                |> unwrap ( Nothing, Cmd.none )
-                                    (Sentry.update
-                                        eventMsg
-                                    )
-                    in
-                    ( { model
-                        | sentries =
-                            model.sentries
-                                |> (\ss ->
-                                        { ss
-                                            | zKSync =
-                                                newEventSentry
-                                        }
-                                   )
-                      }
-                    , cmd
-                    )
-
-                ScrollTestnet ->
-                    let
-                        ( newEventSentry, cmd ) =
-                            model.sentries.scrollTestnet
-                                |> unwrap ( Nothing, Cmd.none )
-                                    (Sentry.update
-                                        eventMsg
-                                    )
-                    in
-                    ( { model
-                        | sentries =
-                            model.sentries
-                                |> (\ss ->
-                                        { ss
-                                            | scrollTestnet =
-                                                newEventSentry
-                                        }
-                                   )
-                      }
-                    , cmd
-                    )
-
+        -- case chain of
+        --     Eth ->
+        --         let
+        --             ( newEventSentry, cmd ) =
+        --                 Dict.get "ethereum" model.sentries
+        --                     |> Maybe.withDefault
+        --                     |> unwrap ( Nothing, Cmd.none )
+        --                         (Sentry.update
+        --                             eventMsg
+        --                         )
+        --         in
+        --         ( { model
+        --             | sentries =
+        --                 model.sentries
+        --                     |> (\ss ->
+        --                             { ss
+        --                                 | ethereum =
+        --                                     newEventSentry
+        --                             }
+        --                        )
+        --           }
+        --         , cmd
+        --         )
+        --     XDai ->
+        --         let
+        --             ( newEventSentry, cmd ) =
+        --                 model.sentries.xDai
+        --                     |> unwrap ( Nothing, Cmd.none )
+        --                         (Sentry.update
+        --                             eventMsg
+        --                         )
+        --         in
+        --         ( { model
+        --             | sentries =
+        --                 model.sentries
+        --                     |> (\ss ->
+        --                             { ss
+        --                                 | xDai =
+        --                                     newEventSentry
+        --                             }
+        --                        )
+        --           }
+        --         , cmd
+        --         )
+        --     ZkSync ->
+        --         let
+        --             ( newEventSentry, cmd ) =
+        --                 model.sentries.zKSync
+        --                     |> unwrap ( Nothing, Cmd.none )
+        --                         (Sentry.update
+        --                             eventMsg
+        --                         )
+        --         in
+        --         ( { model
+        --             | sentries =
+        --                 model.sentries
+        --                     |> (\ss ->
+        --                             { ss
+        --                                 | zKSync =
+        --                                     newEventSentry
+        --                             }
+        --                        )
+        --           }
+        --         , cmd
+        --         )
+        --     ScrollTestnet ->
+        --         let
+        --             ( newEventSentry, cmd ) =
+        --                 model.sentries.scrollTestnet
+        --                     |> unwrap ( Nothing, Cmd.none )
+        --                         (Sentry.update
+        --                             eventMsg
+        --                         )
+        --         in
+        --         ( { model
+        --             | sentries =
+        --                 model.sentries
+        --                     |> (\ss ->
+        --                             { ss
+        --                                 | scrollTestnet =
+        --                                     newEventSentry
+        --                             }
+        --                        )
+        --           }
+        --         , cmd
+        --         )
         PostLogReceived res ->
             case res.returnData of
                 Err err ->
@@ -1980,7 +1980,7 @@ handleTxReceipt chain txReceipt =
             )
 
 
-fetchBulk : Config -> Chain -> List PostId -> Cmd Msg
+fetchBulk : Dict String ChainConfig -> String -> List PostId -> Cmd Msg
 fetchBulk config chain posts =
     let
         hashes =
@@ -1993,7 +1993,7 @@ fetchBulk config chain posts =
         |> Task.attempt AccountingFetched
 
 
-fetchBlockTime : Dict BlockTimeKey Time.Posix -> Config -> Core -> Cmd Msg
+fetchBlockTime : Dict BlockTimeKey Time.Posix -> Dict String ChainConfig -> Core -> Cmd Msg
 fetchBlockTime blockTimes config core =
     let
         blockTimeKey =
@@ -2010,7 +2010,7 @@ fetchBlockTime blockTimes config core =
             |> Task.attempt (BlockTimeFetched blockTimeKey)
 
 
-fetchBalance : Config -> UserInfo -> Cmd Msg
+fetchBalance : Dict String ChainConfig -> UserInfo -> Cmd Msg
 fetchBalance config userInfo =
     Eth.getBalance
         (Chain.getProviderUrl userInfo.chain config)
@@ -2021,7 +2021,7 @@ fetchBalance config userInfo =
             )
 
 
-fetchPostInfo : Dict BlockTimeKey Time.Posix -> Config -> Core -> Cmd Msg
+fetchPostInfo : Dict BlockTimeKey Time.Posix -> Dict String ChainConfig -> Core -> Cmd Msg
 fetchPostInfo blockTimes config core =
     let
         blockTimeKey =

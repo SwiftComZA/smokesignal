@@ -6,6 +6,7 @@ import Browser.Navigation
 import Chain
 import Contracts.SmokeSignal
 import DemoPhaceSrcMutator
+import Dict
 import Eth.Types
 import Json.Decode
 import Maybe.Extra exposing (unwrap)
@@ -52,30 +53,28 @@ init flags =
                         chainConfigs
                             |> List.foldl
                                 (\data ->
-                                    case data.chain of
-                                        Types.XDai ->
-                                            \config_ ->
-                                                { config_
-                                                    | xDai = data
-                                                }
-
-                                        Types.Eth ->
-                                            \config_ ->
-                                                { config_
-                                                    | ethereum = data
-                                                }
-
-                                        Types.ZkSync ->
-                                            \config_ ->
-                                                { config_
-                                                    | zKSync = data
-                                                }
-
-                                        Types.ScrollTestnet ->
-                                            \config_ ->
-                                                { config_
-                                                    | scrollTestnet = data
-                                                }
+                                    Dict.insert data.chain data
+                                 -- case data.chain of
+                                 -- Types.XDai ->
+                                 --     \config_ ->
+                                 --         { config_
+                                 --             | xDai = data
+                                 --         }
+                                 -- Types.Eth ->
+                                 --     \config_ ->
+                                 --         { config_
+                                 --             | ethereum = data
+                                 --         }
+                                 -- Types.ZkSync ->
+                                 --     \config_ ->
+                                 --         { config_
+                                 --             | zKSync = data
+                                 --         }
+                                 -- Types.ScrollTestnet ->
+                                 --     \config_ ->
+                                 --         { config_
+                                 --             | scrollTestnet = data
+                                 --         }
                                 )
                                 emptyModel.config
 
