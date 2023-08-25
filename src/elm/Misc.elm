@@ -37,6 +37,7 @@ emptyModel =
         , zKSync = Nothing
         , scrollTestnet = Nothing
         , baseTestnet = Nothing
+        , shardeumTestnet = Nothing
         }
     , blockTimes = Dict.empty
     , showAddressId = Nothing
@@ -69,6 +70,7 @@ emptyModel =
     , zKSyncAccountingQueue = Nothing
     , scrollTestnetAccountingQueue = Nothing
     , baseTestnetAccountingQueue = Nothing
+    , shardeumTestnetAccountingQueue = Nothing
     , disableWalletConnect = True
     }
 
@@ -119,6 +121,13 @@ emptyConfig =
         , providerUrl = ""
         }
     , baseTestnet =
+        { chain = Types.Eth
+        , ssContract = emptyAddress
+        , ssScriptsContract = emptyAddress
+        , startScanBlock = 0
+        , providerUrl = ""
+        }
+    , shardeumTestnet =
         { chain = Types.Eth
         , ssContract = emptyAddress
         , ssScriptsContract = emptyAddress

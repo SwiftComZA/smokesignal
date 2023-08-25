@@ -25,6 +25,7 @@ type alias Flags =
     , zkTestProviderUrl : String
     , scrollTestnetProviderUrl : String
     , baseTestnetProviderUrl : String
+    , shardeumTestnetProviderUrl : String
     , hasWallet : Bool
     , chains : Value
     , faucetToken : String
@@ -44,6 +45,7 @@ type alias Model =
         , zKSync : Maybe (EventSentry Msg)
         , scrollTestnet : Maybe (EventSentry Msg)
         , baseTestnet : Maybe (EventSentry Msg)
+        , shardeumTestnet : Maybe (EventSentry Msg)
         }
     , view : View
     , sortType : SortType
@@ -94,6 +96,11 @@ type alias Model =
             , postIds : List PostId
             }
     , baseTestnetAccountingQueue :
+        Maybe
+            { updatedAt : Posix
+            , postIds : List PostId
+            }
+    , shardeumTestnetAccountingQueue :
         Maybe
             { updatedAt : Posix
             , postIds : List PostId
@@ -248,6 +255,7 @@ type alias Config =
     , zKSync : ChainConfig
     , scrollTestnet : ChainConfig
     , baseTestnet : ChainConfig
+    , shardeumTestnet : ChainConfig
     }
 
 
@@ -416,6 +424,7 @@ type Chain
     | ZkSync
     | ScrollTestnet
     | BaseTestnet
+    | ShardeumTestnet
 
 
 type SortType

@@ -29,6 +29,9 @@ getProviderUrl chain =
 
         BaseTestnet ->
             .baseTestnet >> .providerUrl
+        
+        ShardeumTestnet ->
+            .shardeumTestnet >> .providerUrl
 
 
 getConfig : Chain -> Config -> ChainConfig
@@ -48,6 +51,9 @@ getConfig chain =
 
         BaseTestnet ->
             .baseTestnet
+
+        ShardeumTestnet ->
+            .shardeumTestnet
 
 
 txUrl : Chain -> TxHash -> String
@@ -72,6 +78,10 @@ txUrl chain hash =
             "https://goerli.basescan.org/tx/"
                 ++ Eth.Utils.txHashToString hash
 
+        ShardeumTestnet ->
+            "https://explorer-dapps.shardeum.org/transaction/"
+                ++ Eth.Utils.txHashToString hash
+
 
 getColor : Chain -> Color
 getColor chain =
@@ -91,6 +101,9 @@ getColor chain =
         BaseTestnet ->
             Theme.ethereum
 
+        ShardeumTestnet ->
+            Theme.ethereum
+
 
 getName : Chain -> String
 getName chain =
@@ -102,13 +115,16 @@ getName chain =
             "xDai"
 
         ZkSync ->
-            "ZKSync era Testnet"
+            "ZKSync era"
 
         ScrollTestnet ->
-            "Scroll Testnet"
+            "Scroll"
 
         BaseTestnet ->
-            "Base Testnet"
+            "Base"
+
+        ShardeumTestnet ->
+            "Shardeum"
 
 
 chainDecoder : Flags -> Decoder (List Types.ChainConfig)
@@ -135,6 +151,9 @@ chainDecoder flags =
 
                     Types.BaseTestnet ->
                         flags.baseTestnetProviderUrl
+
+                    Types.ShardeumTestnet ->
+                        flags.shardeumTestnetProviderUrl
             }
         )
         (Decode.field "network" decodeChain
@@ -179,6 +198,10 @@ decodeChain =
 
                     Eth.Net.Private 84531 ->
                         Types.BaseTestnet
+                            |> Ok
+
+                    Eth.Net.Private 8081 ->
+                        Types.ShardeumTestnet
                             |> Ok
 
                     _ ->

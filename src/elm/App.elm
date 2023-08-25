@@ -82,6 +82,12 @@ init flags =
                                                 { config_
                                                     | baseTestnet = data
                                                 }
+
+                                        Types.ShardeumTestnet ->
+                                            \config_ ->
+                                                { config_
+                                                    | shardeumTestnet = data
+                                                }
                                 )
                                 emptyModel.config
 
@@ -191,6 +197,9 @@ startApp flags model =
         ( baseTestnetSentry, baseTestnetCmd ) =
             startSentry model.config.baseTestnet
 
+        ( shardeumTestnetSentry, shardeumTestnetCmd ) =
+            startSentry model.config.shardeumTestnet
+
         now =
             Time.millisToPosix flags.nowInMillis
     in
@@ -208,6 +217,7 @@ startApp flags model =
                             , zKSync = Just zKSyncSentry
                             , scrollTestnet = Just scrollTestnetSentry
                             , baseTestnet = Just baseTestnetSentry
+                            , shardeumTestnet = Just shardeumTestnetSentry
                         }
                    )
         , userNotices = routingUserNotices
@@ -223,6 +233,7 @@ startApp flags model =
         , xDaiCmd
         , zKSyncCmd
         , baseTestnetCmd
+        , shardeumTestnetCmd
         , Random.generate Types.NewDemoSrc DemoPhaceSrcMutator.addressSrcGenerator
         , Ports.setDescription Misc.defaultSeoDescription
         ]

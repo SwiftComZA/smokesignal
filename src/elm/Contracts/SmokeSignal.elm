@@ -71,6 +71,11 @@ burnEncodedPost wallet smokeSignalContractAddress draft =
 
                             BaseTestnet ->
                                 Nothing
+
+                            ShardeumTestnet ->
+                                Nothing
+
+                            
                 }
            )
 
@@ -156,6 +161,9 @@ tipForPost wallet smokeSignalContractAddress messageHash amount donation =
 
                             BaseTestnet ->
                                 Nothing
+
+                            ShardeumTestnet ->
+                                Nothing
                 }
            )
 
@@ -190,6 +198,9 @@ burnForPost wallet smokeSignalContractAddress messageHash amount donation =
                                 Nothing
 
                             BaseTestnet ->
+                                Nothing
+
+                            ShardeumTestnet ->
                                 Nothing
                 }
            )
