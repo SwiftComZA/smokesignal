@@ -76,6 +76,12 @@ init flags =
                                                 { config_
                                                     | scrollTestnet = data
                                                 }
+
+                                        Types.BaseTestnet ->
+                                            \config_ ->
+                                                { config_
+                                                    | baseTestnet = data
+                                                }
                                 )
                                 emptyModel.config
 
@@ -182,6 +188,9 @@ startApp flags model =
         ( scrollTestnetSentry, scrollTestnetCmd ) =
             startSentry model.config.scrollTestnet
 
+        ( baseTestnetSentry, baseTestnetCmd ) =
+            startSentry model.config.baseTestnet
+
         now =
             Time.millisToPosix flags.nowInMillis
     in
@@ -198,6 +207,7 @@ startApp flags model =
                             , ethereum = Just ethSentry
                             , zKSync = Just zKSyncSentry
                             , scrollTestnet = Just scrollTestnetSentry
+                            , baseTestnet = Just baseTestnetSentry
                         }
                    )
         , userNotices = routingUserNotices
@@ -212,7 +222,7 @@ startApp flags model =
         [ ethCmd
         , xDaiCmd
         , zKSyncCmd
-        , scrollTestnetCmd
+        , baseTestnetCmd
         , Random.generate Types.NewDemoSrc DemoPhaceSrcMutator.addressSrcGenerator
         , Ports.setDescription Misc.defaultSeoDescription
         ]

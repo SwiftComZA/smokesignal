@@ -68,6 +68,9 @@ burnEncodedPost wallet smokeSignalContractAddress draft =
 
                             ScrollTestnet ->
                                 Nothing
+
+                            BaseTestnet ->
+                                Nothing
                 }
            )
 
@@ -150,6 +153,9 @@ tipForPost wallet smokeSignalContractAddress messageHash amount donation =
 
                             ScrollTestnet ->
                                 Nothing
+
+                            BaseTestnet ->
+                                Nothing
                 }
            )
 
@@ -181,6 +187,9 @@ burnForPost wallet smokeSignalContractAddress messageHash amount donation =
                                 Nothing
 
                             ScrollTestnet ->
+                                Nothing
+
+                            BaseTestnet ->
                                 Nothing
                 }
            )

@@ -43,10 +43,13 @@ chain c =
                     "Ethereum"
 
                 Types.ZkSync ->
-                    "ZKSync era Testnet"
+                    "ZKSync era"
 
                 Types.ScrollTestnet ->
-                    "Scroll Testnet"
+                    "Scroll"
+
+                Types.BaseTestnet ->
+                    "Base"
 
         img =
             case c of
@@ -60,6 +63,9 @@ chain c =
                     View.Img.eth 20 <| Element.rgb 0.5 0.5 1
 
                 Types.ScrollTestnet ->
+                    View.Img.eth 20 <| Element.rgb 0.5 0.5 1
+
+                Types.BaseTestnet ->
                     View.Img.eth 20 <| Element.rgb 0.5 0.5 1
     in
     [ img, text txt ]
@@ -376,6 +382,42 @@ viewInstructions chainSwitchInProgress dProfile userInfo =
                     , spacing 10
                     ]
                 |> Just
+
+        BaseTestnet ->
+            [ [ el [ Font.bold ] (text "Note:")
+              , text " Posting on SmokeSignal using Ethereum can result in very high gas fees. Using xDai is a cheaper alternative."
+              ]
+                |> paragraph [ Font.color black ]
+            , Input.button
+                [ Background.color Theme.green
+                , padding 10
+                , View.Attrs.roundBorder
+                , hover
+                , width <| px 180
+                , Element.alignRight
+                ]
+                { onPress = Just XDaiImport
+                , label =
+                    if chainSwitchInProgress then
+                        spinner 20 black
+                            |> el [ centerX ]
+
+                    else
+                        text "Switch to xDai"
+                            |> el [ centerX ]
+                }
+                |> when (userInfo.provider == Types.MetaMask)
+            ]
+                |> (if dProfile == Mobile then
+                        column
+
+                    else
+                        row
+                   )
+                    [ width fill
+                    , spacing 10
+                    ]
+                |> Just
     )
         |> whenJust
             (el
@@ -487,4 +529,9 @@ permapostUrl chain_ hash =
         ScrollTestnet ->
             permaposturl
                 ++ "scroll&tx="
+                ++ Eth.Utils.txHashToString hash
+
+        BaseTestnet ->
+            permaposturl
+                ++ "base&tx="
                 ++ Eth.Utils.txHashToString hash

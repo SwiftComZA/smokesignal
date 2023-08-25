@@ -547,6 +547,28 @@ update msg model =
                     , cmd
                     )
 
+                BaseTestnet ->
+                    let
+                        ( newEventSentry, cmd ) =
+                            model.sentries.baseTestnet
+                                |> unwrap ( Nothing, Cmd.none )
+                                    (Sentry.update
+                                        eventMsg
+                                    )
+                    in
+                    ( { model
+                        | sentries =
+                            model.sentries
+                                |> (\ss ->
+                                        { ss
+                                            | baseTestnet =
+                                                newEventSentry
+                                        }
+                                   )
+                      }
+                    , cmd
+                    )
+
         PostLogReceived res ->
             case res.returnData of
                 Err err ->
@@ -644,6 +666,18 @@ update msg model =
                                 else
                                     Nothing
                             )
+
+                baseTestnetCmd =
+                    model.zKSyncAccountingQueue
+                        |> Maybe.andThen
+                            (\data ->
+                                if twoSecondsSinceUpdate data.updatedAt then
+                                    fetchBulk model.config BaseTestnet data.postIds
+                                        |> Just
+
+                                else
+                                    Nothing
+                            )
             in
             ( { model
                 | ethAccountingQueue =
@@ -670,6 +704,12 @@ update msg model =
 
                     else
                         Nothing
+                , baseTestnetAccountingQueue =
+                    if baseTestnetCmd == Nothing then
+                        model.baseTestnetAccountingQueue
+
+                    else
+                        Nothing
               }
             , [ ethCmd
                     |> Maybe.withDefault Cmd.none
@@ -678,6 +718,8 @@ update msg model =
               , zKSyncCmd
                     |> Maybe.withDefault Cmd.none
               , scrollTestnetCmd
+                    |> Maybe.withDefault Cmd.none
+              , baseTestnetCmd
                     |> Maybe.withDefault Cmd.none
               ]
                 |> Cmd.batch
@@ -727,6 +769,18 @@ update msg model =
                             { updatedAt = time
                             , postIds =
                                 model.scrollTestnetAccountingQueue
+                                    |> unwrap [] .postIds
+                                    |> (::) core.id
+                            }
+                                |> Just
+                    }
+
+                BaseTestnet ->
+                    { model
+                        | baseTestnetAccountingQueue =
+                            { updatedAt = time
+                            , postIds =
+                                model.baseTestnetAccountingQueue
                                     |> unwrap [] .postIds
                                     |> (::) core.id
                             }
