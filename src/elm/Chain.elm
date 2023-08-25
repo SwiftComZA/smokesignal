@@ -27,6 +27,9 @@ getProviderUrl chain =
         ScrollTestnet ->
             .scrollTestnet >> .providerUrl
 
+        BaseTestnet ->
+            .baseTestnet >> .providerUrl
+
 
 getConfig : Chain -> Config -> ChainConfig
 getConfig chain =
@@ -42,6 +45,9 @@ getConfig chain =
 
         ScrollTestnet ->
             .scrollTestnet
+
+        BaseTestnet ->
+            .baseTestnet
 
 
 txUrl : Chain -> TxHash -> String
@@ -62,6 +68,10 @@ txUrl chain hash =
             "https://sepolia-blockscout.scroll.io/tx/"
                 ++ Eth.Utils.txHashToString hash
 
+        BaseTestnet ->
+            "https://goerli.basescan.org/tx/"
+                ++ Eth.Utils.txHashToString hash
+
 
 getColor : Chain -> Color
 getColor chain =
@@ -76,6 +86,9 @@ getColor chain =
             Theme.ethereum
 
         ScrollTestnet ->
+            Theme.ethereum
+
+        BaseTestnet ->
             Theme.ethereum
 
 
@@ -93,6 +106,9 @@ getName chain =
 
         ScrollTestnet ->
             "Scroll Testnet"
+
+        BaseTestnet ->
+            "Base Testnet"
 
 
 chainDecoder : Flags -> Decoder (List Types.ChainConfig)
@@ -116,6 +132,9 @@ chainDecoder flags =
 
                     Types.ScrollTestnet ->
                         flags.scrollTestnetProviderUrl
+
+                    Types.BaseTestnet ->
+                        flags.baseTestnetProviderUrl
             }
         )
         (Decode.field "network" decodeChain
@@ -156,6 +175,10 @@ decodeChain =
 
                     Eth.Net.Private 534351 ->
                         Types.ScrollTestnet
+                            |> Ok
+
+                    Eth.Net.Private 84531 ->
+                        Types.BaseTestnet
                             |> Ok
 
                     _ ->
