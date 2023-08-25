@@ -15,6 +15,7 @@ const ethProviderUrl = ETH_PROVIDER_URL;
 const zkTestProviderUrl = ZKTEST_PROVIDER_URL;
 const scrollTestnetProviderUrl = SCROLLTESTNET_PROVIDER_URL; 
 const baseTestnetProviderUrl = BASETESTNET_PROVIDER_URL;
+const shardeumTestnetProviderUrl = SHARDEUMTESTNET_PROVIDER_URL;
 const faucetToken = FAUCET_TOKEN;
 const gaTrackingId = GA_TRACKING_ID;
 const disableWalletConnect = true
@@ -164,6 +165,7 @@ function startDapp() {
       zkTestProviderUrl,
       scrollTestnetProviderUrl,
       baseTestnetProviderUrl,
+      shardeumTestnetProviderUrl,
       hasWallet,
       chains,
       faucetToken,

@@ -569,6 +569,28 @@ update msg model =
                     , cmd
                     )
 
+                ShardeumTestnet ->
+                    let
+                        ( newEventSentry, cmd ) =
+                            model.sentries.shardeumTestnet
+                                |> unwrap ( Nothing, Cmd.none )
+                                    (Sentry.update
+                                        eventMsg
+                                    )
+                    in
+                    ( { model
+                        | sentries =
+                            model.sentries
+                                |> (\ss ->
+                                        { ss
+                                            | shardeumTestnet =
+                                                newEventSentry
+                                        }
+                                   )
+                      }
+                    , cmd
+                    )
+
         PostLogReceived res ->
             case res.returnData of
                 Err err ->
@@ -678,6 +700,18 @@ update msg model =
                                 else
                                     Nothing
                             )
+
+                shardeumTestnetCmd =
+                    model.zKSyncAccountingQueue
+                        |> Maybe.andThen
+                            (\data ->
+                                if twoSecondsSinceUpdate data.updatedAt then
+                                    fetchBulk model.config ShardeumTestnet data.postIds
+                                        |> Just
+
+                                else
+                                    Nothing
+                            )
             in
             ( { model
                 | ethAccountingQueue =
@@ -710,6 +744,12 @@ update msg model =
 
                     else
                         Nothing
+                , shardeumTestnetAccountingQueue =
+                    if shardeumTestnetCmd == Nothing then
+                        model.shardeumTestnetAccountingQueue
+
+                    else
+                        Nothing
               }
             , [ ethCmd
                     |> Maybe.withDefault Cmd.none
@@ -720,6 +760,8 @@ update msg model =
               , scrollTestnetCmd
                     |> Maybe.withDefault Cmd.none
               , baseTestnetCmd
+                    |> Maybe.withDefault Cmd.none
+            , shardeumTestnetCmd
                     |> Maybe.withDefault Cmd.none
               ]
                 |> Cmd.batch
@@ -781,6 +823,18 @@ update msg model =
                             { updatedAt = time
                             , postIds =
                                 model.baseTestnetAccountingQueue
+                                    |> unwrap [] .postIds
+                                    |> (::) core.id
+                            }
+                                |> Just
+                    }
+
+                ShardeumTestnet ->
+                    { model
+                        | shardeumTestnetAccountingQueue =
+                            { updatedAt = time
+                            , postIds =
+                                model.shardeumTestnetAccountingQueue
                                     |> unwrap [] .postIds
                                     |> (::) core.id
                             }

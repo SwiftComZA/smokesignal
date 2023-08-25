@@ -33,5 +33,12 @@
     "ssContract": "0xFFcD7A85e1c987C2a60d459196505568F99019bC",
     "ssScriptsContract": "0x0000000000000000000000000000000000000000",
     "scan": 8877667
+  },
+  {
+    "name": "shardeumTestnet",
+    "network": 8081,
+    "ssContract": "0x49ee7742058df635400dee4e80bada6fe371d81f",
+    "ssScriptsContract": "0x0000000000000000000000000000000000000000",
+    "scan": 102066
   }
 ]
