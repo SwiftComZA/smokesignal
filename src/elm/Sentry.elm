@@ -232,6 +232,12 @@ requestInitialEvents : HttpProvider -> LogFilter -> ( Int, Int ) -> Task Http.Er
 requestInitialEvents nodePath logFilter ( fromBlock, toBlock ) =
     case logFilter.toBlock of
         BlockNum _ ->
+            -- let
+            --     log =
+            --         Debug.log "FROM BLOCK: " fromBlock
+            --     log1 =
+            --         Debug.log "TO BLOCK: " toBlock
+            -- in
             -- Grab logs in the intitially defined block range, then grab the latest blocks events.
             Eth.getLogs nodePath logFilter
                 |> Task.andThen
@@ -242,6 +248,13 @@ requestInitialEvents nodePath logFilter ( fromBlock, toBlock ) =
                     )
 
         _ ->
+            let
+                log =
+                    Debug.log "FROM BLOCK: " fromBlock
+
+                log1 =
+                    Debug.log "TO BLOCK: " toBlock
+            in
             -- Otherwise, just grab the full block range, where we'll include the latest.
             Eth.getLogs nodePath logFilter
 
