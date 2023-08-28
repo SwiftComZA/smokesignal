@@ -690,7 +690,7 @@ update msg model =
                             )
 
                 baseTestnetCmd =
-                    model.zKSyncAccountingQueue
+                    model.baseTestnetAccountingQueue
                         |> Maybe.andThen
                             (\data ->
                                 if twoSecondsSinceUpdate data.updatedAt then
@@ -702,7 +702,7 @@ update msg model =
                             )
 
                 shardeumTestnetCmd =
-                    model.zKSyncAccountingQueue
+                    model.shardeumTestnetAccountingQueue
                         |> Maybe.andThen
                             (\data ->
                                 if twoSecondsSinceUpdate data.updatedAt then
@@ -761,7 +761,7 @@ update msg model =
                     |> Maybe.withDefault Cmd.none
               , baseTestnetCmd
                     |> Maybe.withDefault Cmd.none
-            , shardeumTestnetCmd
+              , shardeumTestnetCmd
                     |> Maybe.withDefault Cmd.none
               ]
                 |> Cmd.batch

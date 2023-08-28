@@ -234,6 +234,7 @@ startApp flags model =
         , zKSyncCmd
         , baseTestnetCmd
         , shardeumTestnetCmd
+        , scrollTestnetCmd
         , Random.generate Types.NewDemoSrc DemoPhaceSrcMutator.addressSrcGenerator
         , Ports.setDescription Misc.defaultSeoDescription
         ]
@@ -281,7 +282,7 @@ subscriptions model =
           else
             Sub.none
         , Time.every 5000 (always Types.CheckTrackedTxsStatus)
-        , Time.every 1000 Types.HandleAccountingQueues
+        , Time.every 5000 Types.HandleAccountingQueues
         , Ports.walletResponse
             (Wallet.walletInfoDecoder >> Types.WalletResponse)
         , Ports.walletConnectResponse
