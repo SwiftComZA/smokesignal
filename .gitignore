@@ -10,7 +10,6 @@ artifacts/
 flat.sol
 public/index.html
 public/bundle.js
-set_env_vars.sh
 
 # Logs
 logs
