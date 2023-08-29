@@ -595,10 +595,11 @@ update msg model =
             case res.returnData of
                 Err err ->
                     ( model
-                    , err
-                        |> Json.Decode.errorToString
-                        |> String.left 200
-                        |> logString "PostLogReceived"
+                    , Cmd.none
+                      -- err
+                      --     |> Json.Decode.errorToString
+                      --     |> String.left 200
+                      --     |> logString "PostLogReceived"
                     )
 
                 Ok log ->
@@ -925,14 +926,16 @@ update msg model =
 
                 Err err ->
                     ( model
-                    , logHttpError "AccountingFetched" err
+                    , Cmd.none
+                      --logHttpError "AccountingFetched" err
                     )
 
         BlockTimeFetched key timeResult ->
             case timeResult of
                 Err err ->
                     ( model
-                    , logHttpError "BlockTimeFetched" err
+                    , Cmd.none
+                      --logHttpError "BlockTimeFetched" err
                     )
 
                 Ok time ->
