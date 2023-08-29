@@ -11,3 +11,10 @@ export FB_TRACKING_ID=000000000
 export GA_TRACKING_ID=0000000000000000
 
 
+Oracles
+- Eth =     chainlink
+- xDai =    Not needed
+- zkSync =  pyth.network https://docs.pyth.network/documentation/pythnet-price-feeds/evm, example https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ethereum/examples/oracle_swap
+- Scroll =  pyth.network " "
+- Base =    chainlink
+- Shardeum = supraOracles https://docs.shardeum.org/oracles/supraoracles
