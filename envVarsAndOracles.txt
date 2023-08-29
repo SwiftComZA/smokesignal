@@ -18,3 +18,5 @@ Oracles
 - Scroll :      pyth.network " "
 - Base :        chainlink https://docs.chain.link/data-feeds/price-feeds/addresses?network=base
 - Shardeum :    supraOracles https://docs.shardeum.org/oracles/supraoracles
+
+Note: Scroll and Shardeum has no mainnets yet.
