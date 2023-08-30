@@ -1,37 +1,19 @@
 pragma solidity ^0.6.0;
 
-import "./SafeMath.sol";
+import "../../common/openzeppelin/math/SafeMath.sol";
 
-// Maker based oracle
 abstract contract EthPriceOracle
 {
-    function read()
+    function latestRoundData()
         public 
         virtual
         view 
-        returns(bytes32);
-}
-
-
-// Pyth based oracle
-struct Price {
-    // Price
-    int64 price;
-    // Confidence interval around the price
-    uint64 conf;
-    // Price exponent
-    int32 expo;
-    // Unix timestamp describing when the price was published
-    uint publishTime;
-}
-
-abstract contract PythOracle
-{
-    function getPrice(bytes32 id ) 
-        external 
-        view 
-        returns 
-    (Price memory price);
+        returns(
+            uint80 roundID,
+            int answer,
+            uint startedAt,
+            uint timeStamp,
+            uint80 answeredInRound);
 }
 
 struct StoredMessageData 
@@ -49,9 +31,9 @@ contract SmokeSignal
 
     address payable constant burnAddress = address(0x0);
     address payable donationAddress;
-    PythOracle public oracle;
+    EthPriceOracle public oracle;
 
-    constructor(address payable _donationAddress, PythOracle _oracle) 
+    constructor(address payable _donationAddress, EthPriceOracle _oracle) 
         public 
     {
         donationAddress = _donationAddress;
@@ -65,15 +47,18 @@ contract SmokeSignal
         view
         returns (uint _price)
     {
-        return address(oracle) == address(0) ? 10**18 : uint(oracle.read());
+        return address(oracle) == address(0) ? 10**18 : uint(oracle.latestRoundData());
 
         if (address(oracle) == address(0))
             return address(0) ? 10**18
         else
         {
-            bytes32 id = 0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace
-            Price memory price = oracle.getPrice(id);
-            return convertToUint(price, 18);
+            (/* uint80 roundID */,
+            int answer,
+            /*uint startedAt*/,
+            /*uint timeStamp*/,
+            /*uint80 answeredInRound*/) = dataFeed.latestRoundData();
+            return uint(answer);
         }
     }
 
@@ -228,42 +213,12 @@ contract SmokeSignal
     {
         burnAddress.call.value(_wei)("");
     }
-    
-    function convertToUint(Price memory price, uint8 targetDecimals) 
-        private 
-        pure 
-        returns (uint256)
-    {
-        if (price.price < 0 || price.expo > 0 || price.expo < -255) {
-            revert();
-        }
-
-        uint8 priceDecimals = uint8(uint32(-1 * price.expo));
-
-        if (targetDecimals - priceDecimals >= 0) {
-            return
-                uint(uint64(price.price)) *
-                10 ** uint32(targetDecimals - priceDecimals);
-        } else {
-            return
-                uint(uint64(price.price)) /
-                10 ** uint32(priceDecimals - targetDecimals);
-        }
-    }
 }
 
-contract SmokeSignal_Scroll is SmokeSignal
+contract SmokeSignal_Base is SmokeSignal
 {
-    // TODO : add Scroll oracle @Elmer do this first
-    constructor(address payable _donationAddress) SmokeSignal(_donationAddress, PythOracle( // ))
-        public 
-    { }
-}
-
-contract SmokeSignal_zkSync is SmokeSignal
-{
-    // TODO : add zkSync oracle @Elmer do this second
-    constructor(address payable _donationAddress) SmokeSignal(_donationAddress, PythOracle(  ))
+    // TODO : Add the chainlink Eth / usd oracle address for Base here @Elmer
+    constructor(address payable _donationAddress) SmokeSignal(_donationAddress, EthPriceOracle())
         public 
     { }
 }
