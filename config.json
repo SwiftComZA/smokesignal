@@ -16,7 +16,7 @@
   {
     "name": "ZkSyncTestnet",
     "network": 280,
-    "ssContract": "0x22da8FAe02B25877417322817a53Fbb3a43d6BC8",
+    "ssContract": "0x83D59fAb25d765cB75E53b2c57f664A804542978",
     "ssScriptsContract": "0xfD12d100F40532cE2dB8401222321b24c6bC8Cc3",
     "scan": 10758837
   },
@@ -30,7 +30,7 @@
   {
     "name": "baseTestnet",
     "network": 84531,
-    "ssContract": "0xFFcD7A85e1c987C2a60d459196505568F99019bC",
+    "ssContract": "0x12cC46245614c9c469B4006130665547aEA6Bc38",
     "ssScriptsContract": "0x0000000000000000000000000000000000000000",
     "scan": 8877667
   },
