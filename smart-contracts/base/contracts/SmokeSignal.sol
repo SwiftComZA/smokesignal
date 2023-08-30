@@ -47,17 +47,17 @@ contract SmokeSignal
         view
         returns (uint _price)
     {
-        return address(oracle) == address(0) ? 10**18 : uint(oracle.latestRoundData());
+       
 
         if (address(oracle) == address(0))
-            return address(0) ? 10**18
+            return 10**18;
         else
         {
             (/* uint80 roundID */,
             int answer,
             /*uint startedAt*/,
             /*uint timeStamp*/,
-            /*uint80 answeredInRound*/) = dataFeed.latestRoundData();
+            /*uint80 answeredInRound*/) = oracle.latestRoundData();
             return uint(answer);
         }
     }

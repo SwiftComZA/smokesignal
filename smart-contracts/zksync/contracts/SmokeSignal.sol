@@ -1,4 +1,5 @@
 pragma solidity ^0.6.0;
+pragma experimental ABIEncoderV2;
 
 import "./SafeMath.sol";
 
@@ -27,9 +28,10 @@ struct Price {
 
 abstract contract PythOracle
 {
-    function getPrice(bytes32 id ) 
+    function getPriceUnsafe(bytes32 id ) 
         external 
         view 
+        virtual
         returns 
     (Price memory price);
 }
@@ -65,18 +67,19 @@ contract SmokeSignal
         view
         returns (uint _price)
     {
-        return address(oracle) == address(0) ? 10**18 : uint(oracle.read());
+     
 
         if (address(oracle) == address(0))
-            return address(0) ? 10**18
+            return  10**18;
         else
         {
-            bytes32 id = 0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace
-            Price memory price = oracle.getPrice(id);
+            // bytes32 id = 0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace; // This is ETH/USD Mainnet ID
+            bytes32 id = 0xca80ba6dc32e08d06f1aa886011eed1d77c77be9eb761cc10d72b7d0a2fd57a6; // This is ETH/USD Testnet ID
+            Price memory price = oracle.getPriceUnsafe(id);
             return convertToUint(price, 18);
         }
     }
-
+    // 242632774885376000000
     function ethToUsd(uint ethAmount)
         public
         view
@@ -255,7 +258,7 @@ contract SmokeSignal
 contract SmokeSignal_Scroll is SmokeSignal
 {
     // TODO : add Scroll oracle @Elmer do this first
-    constructor(address payable _donationAddress) SmokeSignal(_donationAddress, PythOracle( // ))
+    constructor(address payable _donationAddress) SmokeSignal(_donationAddress, PythOracle( address(0xA2aa501b19aff244D90cc15a4Cf739D2725B5729) ))
         public 
     { }
 }
@@ -263,7 +266,7 @@ contract SmokeSignal_Scroll is SmokeSignal
 contract SmokeSignal_zkSync is SmokeSignal
 {
     // TODO : add zkSync oracle @Elmer do this second
-    constructor(address payable _donationAddress) SmokeSignal(_donationAddress, PythOracle(  ))
+    constructor(address payable _donationAddress) SmokeSignal(_donationAddress, PythOracle( address(0xC38B1dd611889Abc95d4E0a472A667c3671c08DE) ))
         public 
     { }
 }
