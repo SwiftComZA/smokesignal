@@ -22,7 +22,7 @@ export default async function (hre: HardhatRuntimeEnvironment) {
 
   // Create deployer object and load the artifact of the contract you want to deploy.
   const deployer = new Deployer(hre, wallet);
-  const artifact = await deployer.loadArtifact("SmokeSignal_xDai");
+  const artifact = await deployer.loadArtifact("SmokeSignal_zkSync");
 
   // Estimate contract deployment fee
   const donationAddress = "0x959192eb0F3D33531711E596A66A7ee574e18A79";
@@ -46,7 +46,7 @@ export default async function (hre: HardhatRuntimeEnvironment) {
   // verify contract for tesnet & mainnet
   if (process.env.NODE_ENV != "test") {
     // Contract MUST be fully qualified name (e.g. path/sourceName:contractName)
-    const contractFullyQualifedName = "contracts/SmokeSignal.sol:SmokeSignal_xDai";
+    const contractFullyQualifedName = "contracts/SmokeSignal.sol:SmokeSignal_zkSync";
 
     // Verify contract programmatically
     const verificationId = await hre.run("verify:verify", {
