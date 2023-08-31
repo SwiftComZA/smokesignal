@@ -58,7 +58,7 @@ contract SmokeSignal
             /*uint startedAt*/,
             /*uint timeStamp*/,
             /*uint80 answeredInRound*/) = oracle.latestRoundData();
-            return uint(answer);
+            return uint(answer)*10**10;
         }
     }
 

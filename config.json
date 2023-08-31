@@ -30,7 +30,7 @@
   {
     "name": "baseTestnet",
     "network": 84531,
-    "ssContract": "0x12cC46245614c9c469B4006130665547aEA6Bc38",
+    "ssContract": "0xC7A95C6e8EdFBaB92F3a2DeBEBCd225e23fa46b9",
     "ssScriptsContract": "0x0000000000000000000000000000000000000000",
     "scan": 8877667
   },
