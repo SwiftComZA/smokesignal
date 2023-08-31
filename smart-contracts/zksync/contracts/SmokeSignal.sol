@@ -242,8 +242,6 @@ contract SmokeSignal
         }
 
         return uint256(price.price)*10**10;
-
-
     }
 }
 
