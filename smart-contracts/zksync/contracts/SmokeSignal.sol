@@ -76,7 +76,7 @@ contract SmokeSignal
             // bytes32 id = 0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace; // This is ETH/USD Mainnet ID
             bytes32 id = 0xca80ba6dc32e08d06f1aa886011eed1d77c77be9eb761cc10d72b7d0a2fd57a6; // This is ETH/USD Testnet ID
             Price memory price = oracle.getPriceUnsafe(id);
-            return convertToUint(price, 18);
+            return convertToUint(price);
         }
     }
     // 242632774885376000000
@@ -232,7 +232,7 @@ contract SmokeSignal
         burnAddress.call.value(_wei)("");
     }
     
-    function convertToUint(Price memory price, uint8 targetDecimals) 
+    function convertToUint(Price memory price) 
         private 
         pure 
         returns (uint256)
@@ -241,17 +241,9 @@ contract SmokeSignal
             revert();
         }
 
-        uint8 priceDecimals = uint8(uint32(-1 * price.expo));
+        return uint256(price.price)*10**10;
 
-        if (targetDecimals - priceDecimals >= 0) {
-            return
-                uint(uint64(price.price)) *
-                10 ** uint32(targetDecimals - priceDecimals);
-        } else {
-            return
-                uint(uint64(price.price)) /
-                10 ** uint32(priceDecimals - targetDecimals);
-        }
+
     }
 }
 

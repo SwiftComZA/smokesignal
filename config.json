@@ -16,14 +16,14 @@
   {
     "name": "ZkSyncTestnet",
     "network": 280,
-    "ssContract": "0x83D59fAb25d765cB75E53b2c57f664A804542978",
+    "ssContract": "0x3A311a8B37b4DF97Ffa04619c62c4E7Db11c36DB",
     "ssScriptsContract": "0xfD12d100F40532cE2dB8401222321b24c6bC8Cc3",
     "scan": 10758837
   },
   {
     "name": "scrollTestnet",
     "network": 534351,
-    "ssContract": "0x74c78350714c72ff0f011D6C6A34eF7Fd1fe5159",
+    "ssContract": "0xd2f807Dc06f4d56Cd1aF752066196F4F09aB032A",
     "ssScriptsContract": "0x0000000000000000000000000000000000000000",
     "scan": 150233
   }, 
